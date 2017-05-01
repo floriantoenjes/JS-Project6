@@ -36,7 +36,7 @@ const baseUrl = "http://www.shirts4mike.com";
 const catalogueUrl = baseUrl + "/shirts.php";
 
 // Scrape the shirt catalogue
-scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback);
+scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback).catch(function(){});
 
 function scrapeShirtCatalogueCallback(err, page) {
     if (err) {
@@ -81,13 +81,14 @@ function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
 function writeCSVFile() {
     createDirectory();
     const csvData = createCSVData();
-    const fileName = path + "/" + createDate() + ".csv";
+    const fileName = createDate();
+    const filePath = path + "/" + fileName + ".csv";
 
-    fs.writeFile(fileName, csvData, function (err) {
+    fs.writeFile(filePath, csvData, function (err) {
         if (err) {
             throw err;
         }
-        console.log('file saved');
+        console.log(`CSV file "${fileName}" saved.`);
     });
 }
 
