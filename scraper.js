@@ -4,8 +4,9 @@ const scrapeIt = require("scrape-it");
 
 const baseUrl = "http://www.shirts4mike.com";
 
+const shirts = [];
+
 scrapeIt(baseUrl + "/shirts.php", {
-    // Fetch the articles
     articles: {
         listItem: ".products li"
       , data: {
@@ -16,13 +17,10 @@ scrapeIt(baseUrl + "/shirts.php", {
         }
     }
 }, (err, page) => {
-    console.log(err || page);
 
     for (let article of page.articles) {
-        console.log(article.src);
 
         scrapeIt(baseUrl + "/" + article.src, {
-//            url and image url
             title: {
                 selector: "img"
                 , attr: "alt"
@@ -33,7 +31,7 @@ scrapeIt(baseUrl + "/shirts.php", {
                 , attr: "src"
             }
         }, (er, shirtPage) => {
-            console.log(er || shirtPage);
+            shirts.push(shirtPage);
         });
     }
 });
