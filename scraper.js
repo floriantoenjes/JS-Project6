@@ -53,4 +53,8 @@ scrapeIt("http://www.shirts4mike.com/shirts.php", {
     }
 }, (err, page) => {
     console.log(err || page);
+
+    for (let article of page.articles) {
+        console.log(article.src);
+    }
 });
