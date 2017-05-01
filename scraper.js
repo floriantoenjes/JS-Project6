@@ -6,7 +6,7 @@ const scrapeIt = require("scrape-it");
 
 const baseUrl = "http://www.shirts4mike.com";
 
-const fields = ["title", "price", "imgUrl", "url"];
+const fields = ["Title", "Price", "ImageURL", "URL"];
 const shirts = [];
 
 scrapeIt(baseUrl + "/shirts.php", {
@@ -38,19 +38,17 @@ function scrapeShirtCatalogue(err, page) {
                 }
             }, (er, shirtPage) => {
                 const shirt = {
-                    title: shirtPage.title,
-                    price: shirtPage.price,
-                    imgUrl: baseUrl + "/" + shirtPage.imgUrl,
-                    url: shirtUrl
+                    Title: shirtPage.title,
+                    Price: shirtPage.price,
+                    ImageURL: baseUrl + "/" + shirtPage.imgUrl,
+                    URL: shirtUrl
                 };
                 shirts.push(shirt);
-                console.log(shirt);
                 resolve(true);
             });
         }));
     }
     Promise.all(promises).then(function () {
-        console.log("Last");
         writeCSVFile();
     });
 }
@@ -61,7 +59,9 @@ function writeCSVFile() {
         fields: fields
     });
 
-    fs.writeFile('file.csv', csv, function (err) {
+    const date = (new Date()).toISOString().slice(0, 10);
+
+    fs.writeFile(date + ".csv", csv, function (err) {
         if (err) throw err;
         console.log('file saved');
     });
