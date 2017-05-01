@@ -1,0 +1,14 @@
+{
+  "name": "content_scraper",
+  "version": "1.0.0",
+  "description": "Techdegree Project 6 - Build a Content Scraper",
+  "main": "scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Florian Tönjes",
+  "license": "ISC",
+  "dependencies": {
+    "scrape-it": "^3.3.2"
+  }
+}
