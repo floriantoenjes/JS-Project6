@@ -5,6 +5,7 @@ const json2csv = require("json2csv");
 const scrapeIt = require("scrape-it");
 
 const shirts = [];
+const path = "./data";
 
 const catalogueQuery = {
     articles: {
@@ -46,9 +47,9 @@ function scrapeShirtCatalogueCallback(err, page) {
 
             // Scrape the shirt details page
             scrapeIt(shirtUrl, shirtDetailsQuery,
-                     function (err, shirtPage) {
-                scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve);
-            });
+                function (err, shirtPage) {
+                    scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve);
+                });
 
         }));
     }
@@ -71,22 +72,31 @@ function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
 }
 
 function writeCSVFile() {
-    const path = "./data";
+    createDirectory();
+    createCSVData();
 
+    fs.writeFile(path + "/" + createDate() + ".csv", csv, function (err) {
+        if (err) {
+            throw err;
+        }
+        console.log('file saved');
+    });
+}
+
+function createDirectory() {
     if (!fs.existsSync(path)) {
         fs.mkdirSync(path);
     }
+}
 
+function createCSVData() {
     const fields = ["Title", "Price", "ImageURL", "URL"];
     const csv = json2csv({
         data: shirts,
         fields: fields
     });
+}
 
-    const date = (new Date()).toISOString().slice(0, 10);
-
-    fs.writeFile(path + "/" + date + ".csv", csv, function (err) {
-        if (err) throw err;
-        console.log('file saved');
-    });
+function createDate() {
+    retur new Date()).toISOString().slice(0, 10);
 }
