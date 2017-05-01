@@ -6,6 +6,7 @@ const scrapeIt = require("scrape-it");
 
 const shirts = [];
 const path = "./data";
+const baseUrl = "http://www.shirts4mike.com";
 
 const catalogueQuery = {
     articles: {
@@ -19,6 +20,11 @@ const catalogueQuery = {
     }
 };
 
+const catalogueUrl = baseUrl + "/shirts.php";
+
+// Scrape the shirt catalogue
+scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback).catch(function(){});
+
 const shirtDetailsQuery = {
     title: {
         selector: "img",
@@ -30,13 +36,6 @@ const shirtDetailsQuery = {
         attr: "src"
     }
 };
-
-const baseUrl = "http://www.shirts4mike.com";
-
-const catalogueUrl = baseUrl + "/shirts.php";
-
-// Scrape the shirt catalogue
-scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback).catch(function(){});
 
 function scrapeShirtCatalogueCallback(err, page) {
     if (err) {
@@ -61,6 +60,7 @@ function scrapeShirtCatalogueCallback(err, page) {
         }));
     }
 
+    // Write to csv after everything has been collected
     Promise.all(promises).then(function () {
         writeCSVFile();
     });
