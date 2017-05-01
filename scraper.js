@@ -68,7 +68,6 @@ function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
 
 function writeCSVFile() {
     const fields = ["Title", "Price", "ImageURL", "URL"];
-
     const csv = json2csv({
         data: shirts,
         fields: fields
