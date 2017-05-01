@@ -4,12 +4,9 @@ const fs = require("fs");
 const json2csv = require("json2csv");
 const scrapeIt = require("scrape-it");
 
-const baseUrl = "http://www.shirts4mike.com";
-
-const fields = ["Title", "Price", "ImageURL", "URL"];
 const shirts = [];
 
-scrapeIt(baseUrl + "/shirts.php", {
+const catalogueQuery = {
     articles: {
         listItem: ".products li",
         data: {
@@ -19,41 +16,60 @@ scrapeIt(baseUrl + "/shirts.php", {
             }
         }
     }
-}, scrapeShirtCatalogue);
+};
+
+const shirtDetailsQuery = {
+    title: {
+        selector: "img",
+        attr: "alt"
+    },
+    price: ".price",
+    imgUrl: {
+        selector: "img",
+        attr: "src"
+    }
+};
+
+const baseUrl = "http://www.shirts4mike.com";
+
+scrapeIt(baseUrl + "/shirts.php", catalogueQuery, scrapeShirtCatalogue);
+
 
 function scrapeShirtCatalogue(err, page) {
     const promises = [];
     for (let article of page.articles) {
         promises.push(new Promise(function (resolve, reject) {
+
             const shirtUrl = baseUrl + "/" + article.src;
-            scrapeIt(shirtUrl, {
-                title: {
-                    selector: "img",
-                    attr: "alt"
-                },
-                price: ".price",
-                imgUrl: {
-                    selector: "img",
-                    attr: "src"
-                }
-            }, (er, shirtPage) => {
-                const shirt = {
-                    Title: shirtPage.title,
-                    Price: shirtPage.price,
-                    ImageURL: baseUrl + "/" + shirtPage.imgUrl,
-                    URL: shirtUrl
-                };
-                shirts.push(shirt);
-                resolve(true);
+
+            scrapeIt(shirtUrl, shirtDetailsQuery,
+                     function (err, shirtPage) {
+                scrapeShirtDetailsPage(err, shirtPage, shirtUrl, resolve);
             });
+
         }));
     }
+
     Promise.all(promises).then(function () {
         writeCSVFile();
     });
+
+}
+
+function scrapeShirtDetailsPage(err, shirtPage, shirtUrl, resolve) {
+    const shirt = {
+        Title: shirtPage.title,
+        Price: shirtPage.price,
+        ImageURL: baseUrl + "/" + shirtPage.imgUrl,
+        URL: shirtUrl
+    };
+    shirts.push(shirt);
+    resolve(true);
 }
 
 function writeCSVFile() {
+    const fields = ["Title", "Price", "ImageURL", "URL"];
+
     const csv = json2csv({
         data: shirts,
         fields: fields
