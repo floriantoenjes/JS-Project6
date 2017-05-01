@@ -39,6 +39,11 @@ const catalogueUrl = baseUrl + "/shirts.php";
 scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback);
 
 function scrapeShirtCatalogueCallback(err, page) {
+    if (err) {
+        console.log(`There was an error connecting to "${baseUrl}".`)
+        return;
+    }
+
     const promises = [];
     for (let article of page.articles) {
 
