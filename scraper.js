@@ -16,7 +16,9 @@ scrapeIt(baseUrl + "/shirts.php", {
           }
         }
     }
-}, (err, page) => {
+}, scrapeShirtCatalogue);
+
+function scrapeShirtCatalogue(err, page) {
     const promises = [];
     for (let article of page.articles) {
         promises.push(new Promise(function(resolve, reject){
@@ -40,4 +42,4 @@ scrapeIt(baseUrl + "/shirts.php", {
     Promise.all(promises).then(function() {
         console.log("Last");
     });
-});
+}
