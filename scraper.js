@@ -34,7 +34,6 @@ const baseUrl = "http://www.shirts4mike.com";
 
 scrapeIt(baseUrl + "/shirts.php", catalogueQuery, scrapeShirtCatalogue);
 
-
 function scrapeShirtCatalogue(err, page) {
     const promises = [];
     for (let article of page.articles) {
