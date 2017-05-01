@@ -76,7 +76,7 @@ function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
     };
     shirts.push(shirt);
 
-    // Resolve the promises data collection here
+    // Resolve the promises for data collection here
     resolve(true);
 }
 
