@@ -68,12 +68,12 @@ function scrapeShirtDetails(article, resolve) {
 
     scrapeIt(shirtUrl, shirtDetailsQuery,
         function (err, shirtPage) {
-            scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve);
+            scrapeShirtDetailsCallback(err, shirtPage, shirtUrl, resolve);
         });
 
 }
 
-function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
+function scrapeShirtDetailsCallback(err, shirtPage, shirtUrl, resolve) {
     const shirt = {
         Title: shirtPage.title,
         Price: shirtPage.price,
