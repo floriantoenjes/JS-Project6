@@ -1,9 +1,12 @@
 "use strict";
 
 const scrapeIt = require("scrape-it");
+const json2csv = require("json2csv");
+const fs = require("fs");
 
 const baseUrl = "http://www.shirts4mike.com";
 
+const fields = ["title", "price", "imgUrl", "url"];
 const shirts = [];
 
 scrapeIt(baseUrl + "/shirts.php", {
@@ -22,7 +25,8 @@ function scrapeShirtCatalogue(err, page) {
     const promises = [];
     for (let article of page.articles) {
         promises.push(new Promise(function(resolve, reject){
-            scrapeIt(baseUrl + "/" + article.src, {
+            const shirtUrl = baseUrl + "/" + article.src;
+            scrapeIt(shirtUrl, {
                 title: {
                     selector: "img"
                     , attr: "alt"
@@ -33,13 +37,29 @@ function scrapeShirtCatalogue(err, page) {
                     , attr: "src"
                 }
             }, (er, shirtPage) => {
-                shirts.push(shirtPage);
-                console.log("First");
+                const shirt = {
+                    title: shirtPage.title,
+                    price: shirtPage.price,
+                    imgUrl: baseUrl + "/" + shirtPage.imgUrl,
+                    url: shirtUrl
+                };
+                shirts.push(shirt);
+                console.log(shirt);
                 resolve(true);
             });
         }));
     }
     Promise.all(promises).then(function() {
         console.log("Last");
+        writeCSVFile();
+    });
+}
+
+function writeCSVFile() {
+    const csv = json2csv({data: shirts, fields: fields});
+
+    fs.writeFile('file.csv', csv, function(err) {
+      if (err) throw err;
+      console.log('file saved');
     });
 }

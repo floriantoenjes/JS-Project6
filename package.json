@@ -9,6 +9,7 @@
   "author": "Florian Tönjes",
   "license": "ISC",
   "dependencies": {
+    "json2csv": "^3.7.3",
     "scrape-it": "^3.3.2"
   }
 }
