@@ -8,34 +8,26 @@ const shirts = [];
 const path = "./data";
 const baseUrl = "http://www.shirts4mike.com";
 
-const catalogueQuery = {
-    articles: {
-        listItem: ".products li",
-        data: {
-            src: {
-                selector: "a",
-                attr: "href"
+scrapeShirtCatalogue();
+
+function scrapeShirtCatalogue() {
+    const catalogueQuery = {
+        articles: {
+            listItem: ".products li",
+            data: {
+                src: {
+                    selector: "a",
+                    attr: "href"
+                }
             }
         }
-    }
-};
+    };
 
-const catalogueUrl = baseUrl + "/shirts.php";
+    const catalogueUrl = baseUrl + "/shirts.php";
 
-// Scrape the shirt catalogue
-scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback).catch(function(){});
+    scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback).catch(function () {});
 
-const shirtDetailsQuery = {
-    title: {
-        selector: "img",
-        attr: "alt"
-    },
-    price: ".price",
-    imgUrl: {
-        selector: "img",
-        attr: "src"
-    }
-};
+}
 
 function scrapeShirtCatalogueCallback(err, page) {
     if (err) {
@@ -48,15 +40,7 @@ function scrapeShirtCatalogueCallback(err, page) {
 
         // Create promises for later collection of data
         promises.push(new Promise(function (resolve, reject) {
-
-            const shirtUrl = baseUrl + "/" + article.src;
-
-            // Scrape the shirt details page
-            scrapeIt(shirtUrl, shirtDetailsQuery,
-                function (err, shirtPage) {
-                    scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve);
-                });
-
+            scrapeShirtDetails(article, resolve);
         }));
     }
 
@@ -64,6 +48,28 @@ function scrapeShirtCatalogueCallback(err, page) {
     Promise.all(promises).then(function () {
         writeCSVFile();
     });
+
+}
+
+function scrapeShirtDetails(article, resolve) {
+    const shirtDetailsQuery = {
+        title: {
+            selector: "img",
+            attr: "alt"
+        },
+        price: ".price",
+        imgUrl: {
+            selector: "img",
+            attr: "src"
+        }
+    };
+
+    const shirtUrl = baseUrl + "/" + article.src;
+
+    scrapeIt(shirtUrl, shirtDetailsQuery,
+        function (err, shirtPage) {
+            scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve);
+        });
 
 }
 
@@ -84,7 +90,7 @@ function writeCSVFile() {
     createDirectory();
     const csvData = createCSVData();
     const fileName = createDate() + ".csv";
-    const filePath = path + "/" + fileName ;
+    const filePath = path + "/" + fileName;
 
     fs.writeFile(filePath, csvData, function (err) {
         if (err) {
