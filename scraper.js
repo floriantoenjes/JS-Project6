@@ -86,7 +86,8 @@ function writeCSVFile() {
 
     fs.writeFile(filePath, csvData, function (err) {
         if (err) {
-            throw err;
+            console.log("There was an error saving the CSV file.")
+            return;
         }
         console.log(`CSV file "${fileName}" saved.`);
     });
