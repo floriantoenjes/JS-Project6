@@ -33,8 +33,10 @@ const shirtDetailsQuery = {
 
 const baseUrl = "http://www.shirts4mike.com";
 
+const catalogueUrl = baseUrl + "/shirts.php";
+
 // Scrape the shirt catalogue
-scrapeIt(baseUrl + "/shirts.php", catalogueQuery, scrapeShirtCatalogueCallback);
+scrapeIt(catalogueUrl, catalogueQuery, scrapeShirtCatalogueCallback);
 
 function scrapeShirtCatalogueCallback(err, page) {
     const promises = [];
