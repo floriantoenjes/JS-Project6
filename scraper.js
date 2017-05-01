@@ -1,8 +1,8 @@
 "use strict";
 
-const scrapeIt = require("scrape-it");
-const json2csv = require("json2csv");
 const fs = require("fs");
+const json2csv = require("json2csv");
+const scrapeIt = require("scrape-it");
 
 const baseUrl = "http://www.shirts4mike.com";
 
