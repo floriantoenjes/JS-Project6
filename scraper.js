@@ -73,9 +73,10 @@ function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
 
 function writeCSVFile() {
     createDirectory();
-    createCSVData();
+    const csvData = createCSVData();
+    const fileName = path + "/" + createDate() + ".csv";
 
-    fs.writeFile(path + "/" + createDate() + ".csv", csv, function (err) {
+    fs.writeFile(fileName, csvData, function (err) {
         if (err) {
             throw err;
         }
@@ -95,8 +96,9 @@ function createCSVData() {
         data: shirts,
         fields: fields
     });
+    return csv;
 }
 
 function createDate() {
-    retur new Date()).toISOString().slice(0, 10);
+    return (new Date()).toISOString().slice(0, 10);
 }
