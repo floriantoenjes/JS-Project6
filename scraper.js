@@ -38,6 +38,8 @@ scrapeIt(baseUrl + "/shirts.php", catalogueQuery, scrapeShirtCatalogueCallback);
 function scrapeShirtCatalogueCallback(err, page) {
     const promises = [];
     for (let article of page.articles) {
+
+        // Create promises for data collection later
         promises.push(new Promise(function (resolve, reject) {
 
             const shirtUrl = baseUrl + "/" + article.src;
