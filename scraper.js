@@ -22,7 +22,16 @@ scrapeIt(baseUrl + "/shirts.php", {
         console.log(article.src);
 
         scrapeIt(baseUrl + "/" + article.src, {
-            price: ".price"
+//            url and image url
+            title: {
+                selector: "img"
+                , attr: "alt"
+            },
+            price: ".price",
+            imgUrl: {
+                selector: "img"
+                , attr: "src"
+            }
         }, (er, shirtPage) => {
             console.log(er || shirtPage);
         });
