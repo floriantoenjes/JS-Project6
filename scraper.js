@@ -32,6 +32,7 @@ const shirtDetailsQuery = {
 
 const baseUrl = "http://www.shirts4mike.com";
 
+// Scrape the shirt catalogue
 scrapeIt(baseUrl + "/shirts.php", catalogueQuery, scrapeShirtCatalogueCallback);
 
 function scrapeShirtCatalogueCallback(err, page) {
@@ -41,6 +42,7 @@ function scrapeShirtCatalogueCallback(err, page) {
 
             const shirtUrl = baseUrl + "/" + article.src;
 
+            // Scrape the shirt details page
             scrapeIt(shirtUrl, shirtDetailsQuery,
                      function (err, shirtPage) {
                 scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve);
