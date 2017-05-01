@@ -81,8 +81,8 @@ function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
 function writeCSVFile() {
     createDirectory();
     const csvData = createCSVData();
-    const fileName = createDate();
-    const filePath = path + "/" + fileName + ".csv";
+    const fileName = createDate() + ".csv";
+    const filePath = path + "/" + fileName ;
 
     fs.writeFile(filePath, csvData, function (err) {
         if (err) {
