@@ -71,6 +71,12 @@ function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
 }
 
 function writeCSVFile() {
+    const path = "./data";
+
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(path);
+    }
+
     const fields = ["Title", "Price", "ImageURL", "URL"];
     const csv = json2csv({
         data: shirts,
@@ -79,7 +85,7 @@ function writeCSVFile() {
 
     const date = (new Date()).toISOString().slice(0, 10);
 
-    fs.writeFile(date + ".csv", csv, function (err) {
+    fs.writeFile(path + "/" + date + ".csv", csv, function (err) {
         if (err) throw err;
         console.log('file saved');
     });
