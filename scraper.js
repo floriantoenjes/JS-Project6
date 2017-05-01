@@ -32,9 +32,9 @@ const shirtDetailsQuery = {
 
 const baseUrl = "http://www.shirts4mike.com";
 
-scrapeIt(baseUrl + "/shirts.php", catalogueQuery, scrapeShirtCatalogue);
+scrapeIt(baseUrl + "/shirts.php", catalogueQuery, scrapeShirtCatalogueCallback);
 
-function scrapeShirtCatalogue(err, page) {
+function scrapeShirtCatalogueCallback(err, page) {
     const promises = [];
     for (let article of page.articles) {
         promises.push(new Promise(function (resolve, reject) {
@@ -43,7 +43,7 @@ function scrapeShirtCatalogue(err, page) {
 
             scrapeIt(shirtUrl, shirtDetailsQuery,
                      function (err, shirtPage) {
-                scrapeShirtDetailsPage(err, shirtPage, shirtUrl, resolve);
+                scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve);
             });
 
         }));
@@ -55,7 +55,7 @@ function scrapeShirtCatalogue(err, page) {
 
 }
 
-function scrapeShirtDetailsPage(err, shirtPage, shirtUrl, resolve) {
+function scrapeShirtDetailsPageCallback(err, shirtPage, shirtUrl, resolve) {
     const shirt = {
         Title: shirtPage.title,
         Price: shirtPage.price,
