@@ -11,12 +11,12 @@ const shirts = [];
 
 scrapeIt(baseUrl + "/shirts.php", {
     articles: {
-        listItem: ".products li"
-      , data: {
+        listItem: ".products li",
+        data: {
             src: {
-              selector: "a"
-              , attr: "href"
-          }
+                selector: "a",
+                attr: "href"
+            }
         }
     }
 }, scrapeShirtCatalogue);
@@ -24,17 +24,17 @@ scrapeIt(baseUrl + "/shirts.php", {
 function scrapeShirtCatalogue(err, page) {
     const promises = [];
     for (let article of page.articles) {
-        promises.push(new Promise(function(resolve, reject){
+        promises.push(new Promise(function (resolve, reject) {
             const shirtUrl = baseUrl + "/" + article.src;
             scrapeIt(shirtUrl, {
                 title: {
-                    selector: "img"
-                    , attr: "alt"
+                    selector: "img",
+                    attr: "alt"
                 },
                 price: ".price",
                 imgUrl: {
-                    selector: "img"
-                    , attr: "src"
+                    selector: "img",
+                    attr: "src"
                 }
             }, (er, shirtPage) => {
                 const shirt = {
@@ -49,17 +49,20 @@ function scrapeShirtCatalogue(err, page) {
             });
         }));
     }
-    Promise.all(promises).then(function() {
+    Promise.all(promises).then(function () {
         console.log("Last");
         writeCSVFile();
     });
 }
 
 function writeCSVFile() {
-    const csv = json2csv({data: shirts, fields: fields});
+    const csv = json2csv({
+        data: shirts,
+        fields: fields
+    });
 
-    fs.writeFile('file.csv', csv, function(err) {
-      if (err) throw err;
-      console.log('file saved');
+    fs.writeFile('file.csv', csv, function (err) {
+        if (err) throw err;
+        console.log('file saved');
     });
 }
