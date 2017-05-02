@@ -8,8 +8,6 @@ const shirts = [];
 const path = "./data";
 const baseUrl = "http://www.shirts4mike.com";
 
-scrapeShirtCatalogue();
-
 function scrapeShirtCatalogue() {
     const catalogueQuery = {
         articles: {
@@ -119,3 +117,6 @@ function createCSVData() {
 function createDate() {
     return (new Date()).toISOString().slice(0, 10);
 }
+
+
+scrapeShirtCatalogue();
