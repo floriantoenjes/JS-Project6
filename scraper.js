@@ -7,6 +7,11 @@ const scrapeIt = require("scrape-it");
 const shirts = [];
 const path = "./data";
 const baseUrl = "http://www.shirts4mike.com";
+const fields = ["Title", "Price", "ImageURL", "URL", "Time"];
+
+
+scrapeShirtCatalogue();
+
 
 function scrapeShirtCatalogue() {
     const catalogueQuery = {
@@ -76,7 +81,8 @@ function scrapeShirtDetailsCallback(err, shirtPage, shirtUrl, resolve) {
         Title: shirtPage.title,
         Price: shirtPage.price,
         ImageURL: baseUrl + "/" + shirtPage.imgUrl,
-        URL: shirtUrl
+        URL: shirtUrl,
+        Time: new Date().toJSON()
     };
     shirts.push(shirt);
 
@@ -106,7 +112,6 @@ function createDirectory() {
 }
 
 function createCSVData() {
-    const fields = ["Title", "Price", "ImageURL", "URL"];
     const csv = json2csv({
         data: shirts,
         fields: fields
@@ -117,6 +122,3 @@ function createCSVData() {
 function createDate() {
     return (new Date()).toISOString().slice(0, 10);
 }
-
-
-scrapeShirtCatalogue();
